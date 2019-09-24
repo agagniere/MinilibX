@@ -12,20 +12,22 @@
 
 include libmlx.mk
 
-all: $(MLX_NAME)
+all: $(MLX_NAME) mlx.h
 
 $(MLX_NAME): $(MLX_LIB)
+	ln -s $^ $@
+
+mlx.h: $(MLX_DIR)/mlx.h
 	ln -s $^ $@
 
 $(MLX_LIB):
 	@make -C $(MLX_DIR)
 
 clean:
-	@make -C $(MLX_DIR) clean
 	rm -f $(MLX_NAME)
+	@make -C $(MLX_DIR) clean
 
 fclean: clean
 
-re:
-	@$(MAKE) clean --no-print-directory
+re: clean
 	@$(MAKE) all --no-print-directory

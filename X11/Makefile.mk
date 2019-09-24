@@ -31,7 +31,7 @@ SRC	= mlx_init.c mlx_new_window.c mlx_pixel_put.c mlx_loop.c \
 	mlx_rgb.c mlx_destroy_image.c
 
 OBJ	=$(SRC:.c=.o)
-CFLAGS	= -O3 -I$(INC)
+CFLAG=-O2 -I$(INC) -mcmodel=medium -fPIC
 
 all	: $(NAME) $(DOCP)
 

@@ -85,7 +85,7 @@ cat Makefile.mk | grep -v %%%% >> Makefile.gen
 if [ -n "$1" -a "$1" = "clean" ] ; then
 #	echo "Now make it clean."
 	make -f Makefile.gen clean
-	(cd test ; make -f Makefile.gen clean)
+	#(cd test ; make -f Makefile.gen clean)
 	exit
 fi
 
