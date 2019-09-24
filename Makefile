@@ -23,13 +23,16 @@ $(MLX_HEADER): $(MLX_DIR)/$(MLX_HEADER)
 	ln -s $^ $@
 
 $(MLX_LIB):
-	@make -C $(MLX_DIR) --no-print-directory
+	@$(MAKE) -C $(MLX_DIR) all --no-print-directory
 
 clean:
-	@make -C $(MLX_DIR) clean --no-print-directory
+	@$(MAKE) -C $(MLX_DIR) clean --no-print-directory
 
-fclean: clean
+fclean:
+	@$(MAKE) -C $(MLX_DIR) fclean --no-print-directory
 	rm -f $(MLX_NAME) $(MLX_HEADER)
 
 re: clean
 	@$(MAKE) all --no-print-directory
+
+.PHONY: all clean fclean re

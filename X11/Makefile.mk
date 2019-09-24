@@ -5,21 +5,21 @@
 ## Login   <ol@epitech.net>
 ## 
 ## Started on  Tue Oct  5 15:56:43 2004 Olivier Crouzet
-## Last update Tue May 15 15:41:20 2007 Olivier Crouzet
+## Last update Tue Sep 24 20:59:20 2019 Antoine Gagniere
 ##
 
 ## Please use configure script
 
 
-INC	=%%%%
-HT	=%%%%
-DOCP	=%%%%
+INC  = %%%%
+HT   = %%%%
+DOCP = %%%%
 
 CC ?= gcc
 
-NAME	= libmlx.a
+NAME := libmlx.a
 
-SRC	= mlx_init.c mlx_new_window.c mlx_pixel_put.c mlx_loop.c \
+SRC = mlx_init.c mlx_new_window.c mlx_pixel_put.c mlx_loop.c \
 	mlx_mouse_hook.c mlx_key_hook.c mlx_expose_hook.c mlx_loop_hook.c \
 	mlx_int_anti_resize_win.c mlx_int_do_nothing.c \
 	mlx_int_wait_first_expose.c mlx_int_get_visual.c \
@@ -30,16 +30,21 @@ SRC	= mlx_init.c mlx_new_window.c mlx_pixel_put.c mlx_loop.c \
 	mlx_int_param_event.c mlx_int_set_win_event_mask.c mlx_hook.c \
 	mlx_rgb.c mlx_destroy_image.c
 
-OBJ	=$(SRC:.c=.o)
-CC+=-O2 -I $(INC) -Wall -Wextra
+OBJ = $(SRC:.c=.o)
+CC += -O2 -I $(INC) -Wall -Wextra -g
 
-all	: $(NAME) $(DOCP)
+all: $(NAME)
 
-$(NAME)	: $(OBJ)
+$(NAME): $(OBJ)
 	ar rcs $(NAME) $(OBJ)
 
-do_cp	:
-	cp $(NAME) libmlx_$(HT).a
+clean:
+	rm -f $(OBJ) *~ core *.core
 
-clean	:
-	rm -f $(OBJ) $(NAME) *~ core *.core
+fclean: clean
+	rm -f $(NAME)
+
+re: clean
+	$(MAKE) all
+
+.PHONY: all clean fclean re
