@@ -15,7 +15,7 @@ INC	=%%%%
 HT	=%%%%
 DOCP	=%%%%
 
-CC	= gcc
+CC ?= gcc
 
 NAME	= libmlx.a
 
@@ -31,17 +31,15 @@ SRC	= mlx_init.c mlx_new_window.c mlx_pixel_put.c mlx_loop.c \
 	mlx_rgb.c mlx_destroy_image.c
 
 OBJ	=$(SRC:.c=.o)
-CFLAG=-O2 -I$(INC) -mcmodel=medium -fPIC
+CC+=-O2 -I $(INC) -Wall -Wextra
 
 all	: $(NAME) $(DOCP)
 
 $(NAME)	: $(OBJ)
-	ar -r $(NAME) $(OBJ)
-	ranlib $(NAME)
+	ar rcs $(NAME) $(OBJ)
 
 do_cp	:
 	cp $(NAME) libmlx_$(HT).a
-
 
 clean	:
 	rm -f $(OBJ) $(NAME) *~ core *.core
