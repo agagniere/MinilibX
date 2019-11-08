@@ -30,7 +30,7 @@ int		mlx_loop(t_xvar *xvar)
 	xvar->do_flush = 0;
 	while (keep_looping)
 	{
-		while (!xvar->loop_hook || XPending(xvar->display))
+		while (XPending(xvar->display))
 		{
 			XNextEvent(xvar->display,&ev);
 			if (ev.type == ClientMessage && ev.xclient.data.l[0] == wmDeleteMessage)
@@ -45,7 +45,8 @@ int		mlx_loop(t_xvar *xvar)
 				if (win->hooks[ev.type].hook)
 					mlx_int_param_event[ev.type](xvar, &ev, win);
 		}
-		xvar->loop_hook(xvar->loop_param);
+		if (xvar->loop_hook)
+			xvar->loop_hook(xvar->loop_param);
 	}
 	XCloseDisplay(xvar->display);
 	return (0);
