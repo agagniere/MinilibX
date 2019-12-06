@@ -14,7 +14,13 @@ include libmlx.mk
 
 MLX_HEADER=mlx.h
 
+DOC_DIR=doc
+MAN_PAGES=mlx mlx_loop mlx_new_image mlx_new_window mlx_pixel_put
+PDF_PAGES=$(addprefix $(DOC_DIR)/,$(addsuffix .pdf,$(MAN_PAGES)))
+
 all: $(MLX_NAME) $(MLX_HEADER)
+
+pdf: $(PDF_PAGES)
 
 $(MLX_NAME): $(MLX_LIB)
 	ln -s $^ $@
@@ -25,14 +31,21 @@ $(MLX_HEADER): $(MLX_DIR)/$(MLX_HEADER)
 $(MLX_LIB):
 	@$(MAKE) -C $(MLX_DIR) all --no-print-directory
 
+$(DOC_DIR)/%.pdf: man/%.3 | doc
+	man -t $< | ps2pdf - $@
+
+doc:
+	mkdir $@
+
 clean:
 	@$(MAKE) -C $(MLX_DIR) clean --no-print-directory
 
 fclean:
 	@$(MAKE) -C $(MLX_DIR) fclean --no-print-directory
-	rm -f $(MLX_NAME) $(MLX_HEADER)
+	$(RM) $(MLX_NAME) $(MLX_HEADER)
+	$(RM) -r $(DOC_DIR)
 
 re: clean
 	@$(MAKE) all --no-print-directory
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re pdf
