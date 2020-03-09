@@ -10,17 +10,18 @@ jobs:
   build-X11:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: configure
+    - name: Download source files
+      uses: actions/checkout@v2
+    - name: Configure
       run: ./configure
-    - name: make
+    - name: Compile
       run: make
     - name: Generate documentation
       run: make pdf
     - name: Upload documentation
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: Man pages
+        name: Documentation
         path: doc
 
   build-MacOSX:
