@@ -7,7 +7,7 @@ CFLAGS+=-O2
 all: $(NOM)
 
 $(NOM):	$(OBJ)
-	$(AR) -s $@ $^
+	$(AR) rcs $@ $^
 
 clean:
 	$(RM) $(OBJ)
