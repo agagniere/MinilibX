@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-X11:
-    runs-on: [ubuntu-latest, ubuntu-16.04]
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: configure
