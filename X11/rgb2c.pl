@@ -14,7 +14,7 @@
 # Generate a .c file with encoded colors, from the XFree86 rgb.txt file.
 #
 
-open(RGB, "/usr/X11/lib/X11/rgb.txt");
+open(RGB, "/etc/X11/rgb.txt");
 
 
 printf("/*\n** This is a generated file with rgb2c.pl and rgb.txt from\n");

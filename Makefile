@@ -30,7 +30,7 @@ $(MLX_HEADER): | $(MLX_FOLDER)/$(MLX_HEADER)
 $(MLX_FOLDER)/$(MLX_NAME):
 	@$(MAKE) -C $(MLX_FOLDER) all --no-print-directory
 
-$(DOC_DIR)/%.pdf: man/%.3 | doc
+$(DOC_DIR)/%.pdf: man/%.3 | $(DOC_DIR)
 	man -t $< | ps2pdf - $@
 
 $(DOC_DIR):
@@ -44,7 +44,7 @@ fclean:
 	$(RM) $(MLX_NAME) $(MLX_HEADER)
 	$(RM) -r $(DOC_DIR)
 
-re: clean
+re: fclean
 	@$(MAKE) all --no-print-directory
 
 .PHONY: all clean fclean re pdf

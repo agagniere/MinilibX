@@ -23,12 +23,17 @@ jobs:
       with:
         name: Documentation
         path: doc
+    - name: Clean
+      run: make fclean
 
   build-MacOSX:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: configure
+    - name: Download source files
+      uses: actions/checkout@v2
+    - name: Configure
       run: ./configure
-    - name: make
+    - name: Compile
       run: make
+    - name: Clean
+      run: make fclean

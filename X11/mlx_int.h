@@ -123,3 +123,5 @@ void	*mlx_int_new_xshm_image();
 char    **mlx_int_str_to_wordtab();
 void	*mlx_new_image();
 int	shm_att_pb();
+int mlx_int_set_win_event_mask(t_xvar* xvar);
+int mlx_int_get_visual(t_xvar *xvar);
