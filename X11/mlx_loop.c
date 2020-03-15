@@ -9,16 +9,17 @@
 */
 
 #include "mlx_int.h"
+
 #include <stdbool.h>
 
-extern int	(*(mlx_int_param_event[]))();
+extern int (*(mlx_int_param_event[]))();
 
-int		mlx_loop(t_xvar *xvar)
+int mlx_loop(t_xvar* xvar)
 {
 	XEvent      ev;
 	t_win_list* win;
-	Atom        wmDeleteMessage = XInternAtom(xvar->display, "WM_DELETE_WINDOW", False);
-	bool        keep_looping = true;
+	Atom wmDeleteMessage = XInternAtom(xvar->display, "WM_DELETE_WINDOW", False);
+	bool keep_looping    = true;
 
 	win = xvar->win_list;
 	while (win)
@@ -32,11 +33,11 @@ int		mlx_loop(t_xvar *xvar)
 	{
 		while (XPending(xvar->display))
 		{
-			XNextEvent(xvar->display,&ev);
+			XNextEvent(xvar->display, &ev);
 			if (ev.type == ClientMessage && ev.xclient.data.l[0] == wmDeleteMessage)
 			{
 				keep_looping = false;
-				break ;
+				break;
 			}
 			win = xvar->win_list;
 			while (win && (win->window != ev.xany.window))
