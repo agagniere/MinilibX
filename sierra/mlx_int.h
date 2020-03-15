@@ -1,9 +1,11 @@
+#pragma once
+
+#include <OpenGL/gl3.h>
+
 //
 // mlx_int.h for minilibx
 //
 // ol@staff.42.fr
-//
-// include opengl needed before mlx_int.h
 //
 
 #define MAX_EVENT    32
