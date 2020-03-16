@@ -49,6 +49,15 @@ int mlx_loop(t_xvar* xvar)
 		if (xvar->loop_hook)
 			xvar->loop_hook(xvar->loop_param);
 	}
-	XCloseDisplay(xvar->display);
 	return (0);
+}
+
+void mlx_break(t_xvar* xvar)
+{
+	XEvent ev;
+	Atom atom = XInternAtom(xvar->display, "WM_DELETE_WINDOW", True);
+
+	ev.type = ClientMessage;
+	ev.xclient.data.l[0] = atom;
+	XSendEvent(xvar->display, xvar->win_list->window, False, 0, &ev);
 }

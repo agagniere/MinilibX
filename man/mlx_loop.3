@@ -14,6 +14,14 @@ MiniLibX - Handle events
 .nf
 .I int
 .fi
+.B mlx_break
+(
+.I void *mlx_ptr
+);
+
+.nf
+.I int
+.fi
 .B mlx_key_hook
 (
 .I void *win_ptr, int (*funct_ptr)(), void *param
@@ -56,8 +64,11 @@ mouse.
 
 To receive events, you must use
 .B mlx_loop
-(). This function never returns. It is an infinite loop that waits for
+(). This function is an infinite loop that waits for
 an event, and then calls a user-defined function associated with this event.
+To exit the loop you can call
+.B mlx_break
+inside a hook.
 A single parameter is needed, the connection identifier
 .I mlx_ptr
 (see the
