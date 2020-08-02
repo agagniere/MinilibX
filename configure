@@ -17,7 +17,7 @@ then
 	fi
 else
 	link_flags="-lXext -lX11"
-	if test -x $(command -v locate)
+	if test -x "$(command -v locate)"
 	then
 		xlibh_path=$(locate Xlib.h)
 		xlib_include=${xlibh_path%X11/Xlib.h}
