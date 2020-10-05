@@ -16,15 +16,19 @@ jobs:
 
     steps:
     - name: Setup the environment
-      run: test $(uname -s) != "Darwin" || brew install ghostscript
+      run: |
+        test $(uname -s) != "Darwin" || brew install ghostscript
+        test $(uname -s) = "Darwin" || sudo apt-get install libx11-dev libxext-dev libxpm-dev
     - name: Download source files
       uses: actions/checkout@v2
     - name: Configure
       run: ./configure
     - name: Compile
       run: make
+    - name: Compile tests
+      run: make test
     - name: Generate documentation
-      run: make pdf
+      run: make doc
 #    - name: Upload documentation
 #      uses: actions/upload-artifact@v1.0.0
 #      with:

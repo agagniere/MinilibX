@@ -23,7 +23,6 @@
 #include <sys/mman.h>
 #include <sys/shm.h>
 #include <unistd.h>
-/* #include	<X11/xpm.h> */
 
 #define MLX_TYPE_SHM_PIXMAP 3
 #define MLX_TYPE_SHM        2
@@ -34,8 +33,7 @@
 #define ENV_DISPLAY      "DISPLAY"
 #define LOCALHOST        "localhost"
 #define ERR_NO_TRUECOLOR "MinilibX Error : No TrueColor Visual available.\n"
-#define WARN_SHM_ATTACH \
-	"MinilibX Warning : X server can't attach shared memory.\n"
+#define WARN_SHM_ATTACH  "MinilibX Warning : X server can't attach shared memory.\n"
 
 typedef struct s_xpm_col
 {
@@ -116,3 +114,5 @@ void*  mlx_new_image();
 int    shm_att_pb();
 int    mlx_int_set_win_event_mask(t_xvar* xvar);
 int    mlx_int_get_visual(t_xvar* xvar);
+int    mlx_int_str_str_cote(char* str, char* find, int len);
+int    mlx_int_str_str(char* str, char* find, int len);

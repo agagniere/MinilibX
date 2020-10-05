@@ -8,9 +8,11 @@
 ** Last update Sat Oct  1 14:56:13 2005 Olivier Crouzet
 */
 
+#include "mlx.h"
 #include "mlx_int.h"
+#include <X11/xpm.h>
 
-extern struct s_col_name mlx_col_name[];
+#include "mlx_rgb.h"
 
 #define RETURN                                    \
 	{                                             \
@@ -62,8 +64,8 @@ char* mlx_int_static_line(char** xpm_data, int* pos, int size)
 			return ((char*)0);
 		len = len2;
 	}
-	/* strcpy(copy,str); */
-	strlcpy(copy, str, len2 + 1);
+	strncpy(copy, str, len2);
+	copy[len2] = '\0';
 	return (copy);
 }
 
@@ -271,12 +273,13 @@ int mlx_int_file_get_rid_comment(char* ptr, int size)
 	}
 }
 
-void* mlx_xpm_file_to_image(t_xvar* xvar, char* file, int* width, int* height)
+void* mlx_xpm_file_to_image(void* mlx_ptr, char* file, int* width, int* height)
 {
-	int    fd;
-	int    size;
-	char*  ptr;
-	t_img* img;
+	t_xvar* xvar = mlx_ptr;
+	int     fd;
+	int     size;
+	char*   ptr;
+	t_img*  img;
 
 	fd = -1;
 	if ((fd = open(file, O_RDONLY)) == -1 || (size = lseek(fd, 0, SEEK_END)) == -1 ||
@@ -297,9 +300,10 @@ void* mlx_xpm_file_to_image(t_xvar* xvar, char* file, int* width, int* height)
 	return (img);
 }
 
-void* mlx_xpm_to_image(t_xvar* xvar, char** xpm_data, int* width, int* height)
+void* mlx_xpm_to_image(void* mlx_ptr, char** xpm_data, int* width, int* height)
 {
-	t_img* img;
+	t_xvar* xvar = mlx_ptr;
+	t_img*  img;
 
 	if (img = mlx_int_parse_xpm(xvar, xpm_data, 0, mlx_int_static_line))
 	{

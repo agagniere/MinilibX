@@ -16,7 +16,7 @@ then
 		folder="elcapitan"
 	fi
 else
-	link_flags="-lXext -lX11"
+	link_flags="-lXext -lX11 -lXpm"
 	if test -x "$(command -v locate)"
 	then
 		xlibh_path=$(locate Xlib.h)
@@ -65,14 +65,14 @@ else
 		done
 	fi
 
-	if test -f $xlib_include/X11/Xlib.h -a -f $xlib_include/X11/extensions/XShm.h
+	if test -f $xlib_include/X11/Xlib.h -a -f $xlib_include/X11/extensions/XShm.h -a -f $xlib_include/X11/xpm.h
 	then
 		echo "X11 headers found at :" $xlib_include
 	else
 		echo "X11 development headers missing" >&2
-		echo "They can be found in the packages 'libx11-dev' and 'libxext-dev'"
+		echo "They can be found in the packages 'libx11-dev', 'libxext-dev' and 'libxpm-dev'"
 		echo
-		echo "sudo apt install libx11-dev libxext-dev"
+		echo "sudo apt install libx11-dev libxext-dev libxpm-dev"
 		exit 1
 	fi
 fi
