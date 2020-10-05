@@ -2,49 +2,62 @@
 # MinilibX Makefile
 #
 
-MLX_HEADER=mlx.h
-MLX_NAME=libmlx.a
+MLX_HEADER = mlx.h
+MLX_NAME   = libmlx.a
 
-DOC_DIR=doc
-MAN_PAGES=mlx mlx_loop mlx_new_image mlx_new_window mlx_pixel_put
-PDF_PAGES=$(addprefix $(DOC_DIR)/,$(addsuffix .pdf,$(MAN_PAGES)))
+DOC_DIR   = pdf
+TROFF_DIR = man
+MAN_PAGES = $(wildcard $(TROFF_DIR)/*.3)
+PDF_PAGES = $(MAN_PAGES:$(TROFF_DIR)/%.3=$(DOC_DIR)/%.pdf)
 
-GENERATED_VARIABLES=libmlx.mk
+GENERATED_VARIABLES = libmlx.mk
 include $(GENERATED_VARIABLES)
 
-all: $(MLX_NAME) $(MLX_HEADER)
+CC  ?= gcc
+SRC  = $(wildcard $(MLX_FOLDER)/*.c)
+SRCM = $(wildcard $(MLX_FOLDER)/*.m)
+OBJ  = $(SRC:.c=.o) $(SRCM:.m=.o)
 
-pdf: $(PDF_PAGES)
+CPPFLAGS += -g -O2
 
-$(MLX_NAME): $(MLX_LIB)
+TEST_DIR = test
+TEST_EXE = test_mlx.exe
 
-$(GENERATED_VARIABLES):
-	$(error "You should run ./configure once")
+lib: $(MLX_NAME) $(MLX_HEADER)
 
-$(MLX_NAME): | $(MLX_FOLDER)/$(MLX_NAME)
-	ln -s $| $@
+doc: $(PDF_PAGES)
 
-$(MLX_HEADER): | $(MLX_FOLDER)/$(MLX_HEADER)
-	ln -s $| $@
+test: $(TEST_DIR)/$(TEST_EXE)
 
-$(MLX_FOLDER)/$(MLX_NAME):
-	@$(MAKE) -C $(MLX_FOLDER) all --no-print-directory
-
-$(DOC_DIR)/%.pdf: man/%.3 | $(DOC_DIR)
-	man -t $< | ps2pdf - $@
-
-$(DOC_DIR):
-	mkdir $@
+all: doc test
 
 clean:
-	@$(MAKE) -C $(MLX_FOLDER) clean --no-print-directory
+	$(RM) $(OBJ)
 
-fclean:
-	@$(MAKE) -C $(MLX_FOLDER) fclean --no-print-directory
-	$(RM) $(MLX_NAME) $(MLX_HEADER)
+fclean: clean
+	$(RM) $(MLX_NAME) $(MLX_HEADER) $(TEST_DIR)/$(TEST_EXE)
 	$(RM) -r $(DOC_DIR)
 
 re: fclean
 	@$(MAKE) all --no-print-directory
 
-.PHONY: all clean fclean re pdf
+
+$(GENERATED_VARIABLES):
+	$(error "You should run ./configure once")
+
+$(MLX_NAME): $(OBJ)
+	$(AR) rcs $@ $^
+
+$(DOC_DIR)/%.pdf: $(TROFF_DIR)/%.3 | $(DOC_DIR)
+	man -t $< | ps2pdf - $@
+
+$(DOC_DIR):
+	mkdir -p $@
+
+$(MLX_HEADER): $(MLX_FOLDER)/$(MLX_HEADER)
+	ln -s $< $@
+
+$(TEST_DIR)/$(TEST_EXE): lib
+	$(CC) $(CPPFLAGS) -I. $(TEST_DIR)/main.c -o $@ -L. -lmlx $(LDLIBS)
+
+.PHONY: all lib clean fclean re pdf test

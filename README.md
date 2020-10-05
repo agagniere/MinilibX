@@ -17,7 +17,7 @@ This fork is an updated version of the minilibX from Olivier Crouzet.
 ### X11 version
 * libx11-dev
 * libxext-dev
-* Optional: libxpm-dev
+* libxpm-dev
 ### Mac OS X version
 * OpenGL
 * AppKit

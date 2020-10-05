@@ -9,6 +9,21 @@
 */
 
 #include "mlx_int.h"
+#include <X11/xpm.h>
+
+int mlx_int_egal_img(XImage* img1, XImage* img2)
+{
+	if (img1->width != img2->width || img1->height != img2->height ||
+	    img1->xoffset != img2->xoffset || img1->format != img2->format ||
+	    img1->byte_order != img2->byte_order || img1->bitmap_unit != img2->bitmap_unit ||
+	    img1->bitmap_bit_order != img2->bitmap_bit_order ||
+	    img1->bitmap_pad != img2->bitmap_pad || img1->depth != img2->depth ||
+	    img1->bytes_per_line != img2->bytes_per_line ||
+	    img1->bits_per_pixel != img2->bits_per_pixel || img1->red_mask != img2->red_mask ||
+	    img1->green_mask != img2->green_mask || img1->blue_mask != img2->blue_mask)
+		return (0);
+	return (1);
+}
 
 void* mlx_int_xpm_f_image(t_xvar* xvar, int* width, int* height, int (*xpm_func)(), void* param)
 {
@@ -58,20 +73,6 @@ void* mlx_int_xpm_f_image(t_xvar* xvar, int* width, int* height, int (*xpm_func)
 	im2->size_line = img1->bytes_per_line;
 	im2->bpp       = img1->bits_per_pixel;
 	return (im2);
-}
-
-int mlx_int_egal_img(XImage* img1, XImage* img2)
-{
-	if (img1->width != img2->width || img1->height != img2->height ||
-	    img1->xoffset != img2->xoffset || img1->format != img2->format ||
-	    img1->byte_order != img2->byte_order || img1->bitmap_unit != img2->bitmap_unit ||
-	    img1->bitmap_bit_order != img2->bitmap_bit_order ||
-	    img1->bitmap_pad != img2->bitmap_pad || img1->depth != img2->depth ||
-	    img1->bytes_per_line != img2->bytes_per_line ||
-	    img1->bits_per_pixel != img2->bits_per_pixel || img1->red_mask != img2->red_mask ||
-	    img1->green_mask != img2->green_mask || img1->blue_mask != img2->blue_mask)
-		return (0);
-	return (1);
 }
 
 void* mlx_xpm_file_to_image(t_xvar* xvar, char* filename, int* width, int* height)
