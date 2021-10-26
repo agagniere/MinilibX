@@ -18,7 +18,7 @@ jobs:
     - name: Setup the environment
       run: |
         test $(uname -s) != "Darwin" || brew install ghostscript
-        test $(uname -s) = "Darwin" || sudo apt-get install libx11-dev libxext-dev libxpm-dev
+        test $(uname -s) = "Darwin" || sudo apt-get install ghostscript libx11-dev libxext-dev libxpm-dev
     - name: Download source files
       uses: actions/checkout@v2
     - name: Configure
