@@ -1,4 +1,4 @@
-from conans import ConanFile, AutoToolsBuildEnvironment, tools
+from conans import ConanFile, AutoToolsBuildEnvironment
 from conans.errors import ConanInvalidConfiguration
 import os
 
@@ -39,13 +39,13 @@ class MinilibXConan(ConanFile):
     def _source_subfolder(self):
         if self.settings.os == "Linux":
             return "X11"
-        elif tools.os_info.os_version >= "11":
-            return "sierra"
         else:
-            return "elcapitan"
+            return "sierra"
+        # MacOS < 11
+        #    return "elcapitan"
 
     def source(self):
-        self.run("git clone " + self.url + " .")
+        self.run(f"git clone {self.url} .")
 
     def configure(self):
         del self.settings.compiler.libcxx
@@ -56,6 +56,8 @@ class MinilibXConan(ConanFile):
         autotools.flags = [f"-O{self.options.optimisation}"]
         if self.options.debug:
             autotools.flags += ["-g"]
+        if self.settings.os == "Macos":
+            autotools.link_flags += ["-framework AppKit"]
         build_env = autotools.vars
         build_env["MLX_FOLDER"] = self._source_subfolder
         autotools.make(args=["shared" if self.options.shared else "static", "-j"], vars=build_env)
