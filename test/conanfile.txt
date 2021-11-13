@@ -1,0 +1,6 @@
+[requires]
+minilibx/2.0
+
+[generators]
+make
+virtualrunenv

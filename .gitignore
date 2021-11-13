@@ -1,7 +1,9 @@
-*.o
 *.a
-*.gen
-mlx.h
-*.pdf
-*.mk
+conan*info.txt
 *.exe
+*.json
+*.lock
+*.mak
+*.o
+*.pdf
+*.so
