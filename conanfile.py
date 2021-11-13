@@ -66,4 +66,8 @@ class MinilibXConan(ConanFile):
         self.copy("libmlx.a", dst="lib")
 
     def package_info(self):
-        self.cpp_info.libs = ["mlx", "Xext", "Xpm", "X11"]
+        self.cpp_info.libs = ["mlx"]
+        if self.settings.os == "Linux":
+            self.cpp_info.system_libs += ["Xext", "Xpm", "X11"]
+        else:
+            self.cpp_info.frameworks.append("AppKit")
