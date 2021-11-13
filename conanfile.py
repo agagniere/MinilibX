@@ -58,7 +58,7 @@ class MinilibXConan(ConanFile):
             autotools.flags += ["-g"]
         build_env = autotools.vars
         build_env["MLX_FOLDER"] = self._source_subfolder
-        autotools.make(args=["shared" if self.options.shared else "static", "-j"],vars=build_env)
+        autotools.make(args=["shared" if self.options.shared else "static", "-j"], vars=build_env)
 
     def package(self):
         self.copy(os.path.join(self._source_subfolder, "mlx.h"), dst="include", keep_path=False)
@@ -67,7 +67,5 @@ class MinilibXConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = ["mlx"]
-        if self.settings.os == "Linux":
-            self.cpp_info.system_libs += ["Xext", "Xpm", "X11"]
-        else:
+        if self.settings.os == "Macos":
             self.cpp_info.frameworks.append("AppKit")
