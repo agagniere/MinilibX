@@ -4,7 +4,7 @@ import os
 
 class MinilibXConan(ConanFile):
     name = "minilibx"
-    version = "2.0"
+    version = "master"
     default_user = "42Paris"
     default_channel = "github"
     license = "BSD"
@@ -14,6 +14,17 @@ class MinilibXConan(ConanFile):
     settings = ("os", "compiler", "arch")
     generators = "make"
     _source_subfolder = "src"
+    options = {
+        "fPIC": [True, False],
+        "optimisation": ['0', '1', '2', '3', 's', 'fast'],
+        "debug": [True, False]
+    }
+    default_options = {
+        "fPIC": False,
+        "optimisation": '2',
+        "debug": True
+    }
+
 
     def validate(self):
         if self.settings.os not in ["Macos", "Linux"]:
@@ -35,6 +46,9 @@ class MinilibXConan(ConanFile):
     def build(self):
         self.run("tail +15 {0}.mk | grep -vP 'CFLAGS\s*=' > {0}.gen".format(os.path.join(self._source_subfolder, "Makefile")))
         autotools = AutoToolsBuildEnvironment(self)
+        autotools.flags = [f"-O{self.options.optimisation}"]
+        if self.options.debug:
+            autotools.flags += ["-g"]
         autotools.make(args=["-C", self._source_subfolder, "-f", "Makefile.gen"])
 
     def package(self):

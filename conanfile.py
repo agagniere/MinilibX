@@ -4,7 +4,7 @@ import os
 
 class MinilibXConan(ConanFile):
     name = "minilibx"
-    version = "2.0"
+    version = "1.2"
     license = "BSD"
     author = "agagniere sid.xxdzs@gmail.com"
     url = "https://github.com/agagniere/MinilibX"
