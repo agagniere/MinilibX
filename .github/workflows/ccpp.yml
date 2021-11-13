@@ -8,31 +8,38 @@ on:
 
 jobs:
   build:
-    name: Build on ${{ matrix.os }}
+    name: Build with Conan on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-
     steps:
-    - name: Setup the environment
-      run: |
-        test $(uname -s) != "Darwin" || brew install ghostscript
-        test $(uname -s) = "Darwin" || sudo apt-get install ghostscript libx11-dev libxext-dev libxpm-dev
-    - name: Download source files
-      uses: actions/checkout@v2
-    - name: Configure
-      run: ./configure
-    - name: Compile
-      run: make
-    - name: Compile tests
-      run: make test
-    - name: Generate documentation
-      run: make doc
-#    - name: Upload documentation
-#      uses: actions/upload-artifact@v1.0.0
-#      with:
-#        name: Documentation
-#        path: doc
-    - name: Clean
-      run: make fclean
+      - name: Setup the environment
+        run: |
+          test $(uname -s) != "Darwin" || brew install ghostscript
+          test $(uname -s) = "Darwin" || sudo apt-get install ghostscript
+      - name: Download source files
+        uses: actions/checkout@v2.4.0
+      - name: Setup python
+        uses: actions/setup-python@v2.2.2
+      - name: Install conan
+        run : |
+          python3 -m venv localenv
+          source localenv/bin/activate
+          python -m pip install conan
+          deactivate
+      - name: Compile minilibX
+        run: |
+          source localenv/bin/activate
+          conan install .
+          conan build .
+          conan package .
+          conan export-pkg . --package-folder=package
+          deactivate
+      - name: Compile tests
+        run: |
+          source localenv/bin/activate
+          ( cd test ; conan install . ; make )
+          deactivate
+      - name: Generate documentation
+        run: make doc

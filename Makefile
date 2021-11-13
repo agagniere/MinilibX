@@ -2,51 +2,44 @@
 # MinilibX Makefile
 #
 
-MLX_HEADER = mlx.h
-MLX_NAME   = libmlx.a
+# Folders
+DOC_DIR       = pdf
+TROFF_DIR     = man
+MLX_FOLDER   ?= X11
 
-DOC_DIR   = pdf
-TROFF_DIR = man
-MAN_PAGES = $(wildcard $(TROFF_DIR)/*.3)
-PDF_PAGES = $(MAN_PAGES:$(TROFF_DIR)/%.3=$(DOC_DIR)/%.pdf)
+# Files
+TARGET_STATIC = libmlx.a
+TARGET_SHARED = libmlx.so
+SRC           = $(wildcard $(MLX_FOLDER)/*.c)
+SRCM          = $(wildcard $(MLX_FOLDER)/*.m)
+OBJ           = $(SRC:.c=.o) $(SRCM:.m=.o)
+MAN_PAGES     = $(wildcard $(TROFF_DIR)/*.3)
+PDF_PAGES     = $(MAN_PAGES:$(TROFF_DIR)/%.3=$(DOC_DIR)/%.pdf)
 
-GENERATED_VARIABLES = libmlx.mk
-include $(GENERATED_VARIABLES)
+# Compiler
+CC           ?= gcc
+CFLAGS       += -Wno-unused-result
 
-CC  ?= gcc
-SRC  = $(wildcard $(MLX_FOLDER)/*.c)
-SRCM = $(wildcard $(MLX_FOLDER)/*.m)
-OBJ  = $(SRC:.c=.o) $(SRCM:.m=.o)
+static: $(TARGET_STATIC)
 
-CPPFLAGS += -g -O2
-
-TEST_DIR = test
-TEST_EXE = test_mlx.exe
-
-lib: $(MLX_NAME) $(MLX_HEADER)
+shared: $(TARGET_SHARED)
 
 doc: $(PDF_PAGES)
 
-test: $(TEST_DIR)/$(TEST_EXE)
-
-all: doc test
+all: static shared doc
 
 clean:
 	$(RM) $(OBJ)
 
 fclean: clean
-	$(RM) $(MLX_NAME) $(MLX_HEADER) $(TEST_DIR)/$(TEST_EXE)
+	$(RM) $(TARGET_SHARED) $(TARGET_STATIC)
 	$(RM) -r $(DOC_DIR)
 
-re: fclean
-	@$(MAKE) all --no-print-directory
-
-
-$(GENERATED_VARIABLES):
-	$(error "You should run ./configure once")
-
-$(MLX_NAME): $(OBJ)
+$(TARGET_STATIC): $(OBJ)
 	$(AR) rcs $@ $^
+
+$(TARGET_SHARED): $(OBJ)
+	$(CC) -shared $(CFLAGS) $^ $(LDFLAGS) $(LDLIBS) -o $@
 
 $(DOC_DIR)/%.pdf: $(TROFF_DIR)/%.3 | $(DOC_DIR)
 	man -t $< | ps2pdf - $@
@@ -54,10 +47,4 @@ $(DOC_DIR)/%.pdf: $(TROFF_DIR)/%.3 | $(DOC_DIR)
 $(DOC_DIR):
 	mkdir -p $@
 
-$(MLX_HEADER): $(MLX_FOLDER)/$(MLX_HEADER)
-	ln -s $< $@
-
-$(TEST_DIR)/$(TEST_EXE): lib
-	$(CC) $(CPPFLAGS) -I. $(TEST_DIR)/main.c -o $@ -L. -lmlx $(LDLIBS)
-
-.PHONY: all lib clean fclean re pdf test
+.PHONY: static shared doc all clean fclean
