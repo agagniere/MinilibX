@@ -14,32 +14,32 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
     steps:
-    - name: Setup the environment
-      run: |
-        test $(uname -s) != "Darwin" || brew install ghostscript
-        test $(uname -s) = "Darwin" || sudo apt-get install ghostscript
-    - name: Download source files
-      uses: actions/checkout@v2.4
-    - name: Setup python
-      uses: actions/setup-python@v2.2.2
-    - name: Install conan
-      run : |
-        python3 -m venv localenv
-        source localenv/bin/activate
-        python -m pip install conan
-        deactivate
-    - name: Compile minilibX
-      run: |
-        source localenv/bin/activate
-        conan install .
-        conan build .
-        conan package .
-        conan export-pkg . --package-folder=package
-        deactivate
-    - name: Compile tests
-      run: |
-        source localenv/bin/activate
-        ( cd test ; conan install . ; make )
-        deactivate
-    - name: Generate documentation
-      run: make doc
+      - name: Setup the environment
+        run: |
+          test $(uname -s) != "Darwin" || brew install ghostscript
+          test $(uname -s) = "Darwin" || sudo apt-get install ghostscript
+      - name: Download source files
+        uses: actions/checkout@v2.4.0
+      - name: Setup python
+        uses: actions/setup-python@v2.2.2
+      - name: Install conan
+        run : |
+          python3 -m venv localenv
+          source localenv/bin/activate
+          python -m pip install conan
+          deactivate
+      - name: Compile minilibX
+        run: |
+          source localenv/bin/activate
+          conan install .
+          conan build .
+          conan package .
+          conan export-pkg . --package-folder=package
+          deactivate
+      - name: Compile tests
+        run: |
+          source localenv/bin/activate
+          ( cd test ; conan install . ; make )
+          deactivate
+      - name: Generate documentation
+        run: make doc
