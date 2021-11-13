@@ -23,13 +23,13 @@ This fork is an updated version of the minilibX from Olivier Crouzet.
 * AppKit
 
 ## Building
-```console
+```bash
 conan create .
 ```
 
 ## Usage
 An example can be found in the `test` folder:
-```console
+```bash
 cd test
 conan install .
 make
