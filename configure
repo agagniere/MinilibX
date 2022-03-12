@@ -19,7 +19,7 @@ else
 	link_flags="-lXext -lX11 -lXpm"
 	if test -x "$(command -v locate)"
 	then
-		xlibh_path=$(locate Xlib.h)
+		xlibh_path=$(locate Xlib.h | tail -1)
 		xlib_include=${xlibh_path%X11/Xlib.h}
 	else
 		echo "Consider installing 'locate' (e.g. sudo apt install locate)"
