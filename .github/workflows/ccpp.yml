@@ -15,31 +15,20 @@ jobs:
         os: [ubuntu-latest, macos-latest]
     steps:
       - name: Setup the environment
-        run: |
-          test $(uname -s) != "Darwin" || brew install ghostscript
-          test $(uname -s) = "Darwin" || sudo apt-get install ghostscript
+        run: $( [ $(uname -s) = "Darwin" ] && echo brew || echo sudo apt-get -yq ) install ghostscript
       - name: Download source files
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3.0.0
       - name: Setup python
-        uses: actions/setup-python@v2.2.2
+        uses: actions/setup-python@v3.0.0
       - name: Install conan
-        run : |
-          python3 -m venv localenv
-          source localenv/bin/activate
-          python -m pip install conan
-          deactivate
+        run : python3 -m pip install conan
       - name: Compile minilibX
         run: |
-          source localenv/bin/activate
-          conan install .
+          export CONAN_SYSREQUIRES_MODE=enabled
+          conan install . -o minilibx:shared=False
           conan build .
-          conan package .
-          conan export-pkg . --package-folder=package
-          deactivate
+          conan export-pkg .
       - name: Compile tests
-        run: |
-          source localenv/bin/activate
-          ( cd test ; conan install . ; make )
-          deactivate
+        run: ( cd test ; conan install . --options="minilibx:shared=False" ; make )
       - name: Generate documentation
         run: make doc

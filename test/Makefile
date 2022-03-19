@@ -16,6 +16,7 @@ CPPFLAGS += $(addprefix -D, $(CONAN_DEFINES))
 LDFLAGS  += $(addprefix -L, $(CONAN_LIB_DIRS))
 LDLIBS   += $(addprefix -l, $(CONAN_LIBS))
 LDLIBS   += $(addprefix -l, $(CONAN_SYSTEM_LIBS))
+LDLIBS   += $(addprefix -framework , $(CONAN_FRAMEWORKS))
 # ===========================
 
 
