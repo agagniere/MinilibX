@@ -17,18 +17,33 @@ jobs:
       - name: Setup the environment
         run: $( [ $(uname -s) = "Darwin" ] && echo brew || echo sudo apt-get -yq ) install ghostscript
       - name: Download source files
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - name: Setup python
-        uses: actions/setup-python@v3.0.0
+        uses: actions/setup-python@v4.2.0
+        with:
+          python-version: '3.10'
       - name: Install conan
-        run : python3 -m pip install conan
+        run : |
+          python3 -m pip install conan
+          conan profile new default --detect
+          conan profile update options.minilibx:shared=False default
+          conan profile update conf.tools.system.package_manager:mode=install default
+          conan profile update conf.tools.system.package_manager:sudo=True default
       - name: Compile minilibX
         run: |
-          export CONAN_SYSREQUIRES_MODE=enabled
-          conan install . -o minilibx:shared=False
+          conan install .
           conan build .
           conan export-pkg .
       - name: Compile tests
-        run: ( cd test ; conan install . --options="minilibx:shared=False" ; make )
+        run: |
+          pushd test
+          conan install .
+          make
+          popd
       - name: Generate documentation
         run: make doc
+      - name: Upload documentation
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: Documentation
+          path: pdf

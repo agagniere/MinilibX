@@ -1,5 +1,6 @@
 from conans import ConanFile, AutoToolsBuildEnvironment
 from conans.errors import ConanInvalidConfiguration
+from conan.tools.build import build_jobs
 import os
 
 class MinilibXConan(ConanFile):
@@ -60,7 +61,7 @@ class MinilibXConan(ConanFile):
             autotools.link_flags += ["-framework AppKit"]
         build_env = autotools.vars
         build_env["MLX_FOLDER"] = self._source_subfolder
-        autotools.make(args=["shared" if self.options.shared else "static", "-j"], vars=build_env)
+        autotools.make(args=["shared" if self.options.shared else "static", "-j", str(build_jobs(self))], vars=build_env)
 
     def package(self):
         self.copy(os.path.join(self._source_subfolder, "mlx.h"), dst="include", keep_path=False)
