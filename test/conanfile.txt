@@ -1,5 +1,5 @@
 [requires]
-minilibx/1.2
+minilibx/1.3
 
 [generators]
 make

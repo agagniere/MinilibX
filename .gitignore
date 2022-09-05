@@ -1,6 +1,8 @@
 *~
 *.a
-conan*info.txt
+conan*.conf
+*conan*.sh
+conan*.txt
 *.exe
 *.json
 *.lock
