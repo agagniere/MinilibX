@@ -18,7 +18,7 @@ SRC  = $(wildcard $(MLX_FOLDER)/*.c)
 SRCM = $(wildcard $(MLX_FOLDER)/*.m)
 OBJ  = $(SRC:.c=.o) $(SRCM:.m=.o)
 
-CPPFLAGS += -g -O2
+CFLAGS ?= -g -O2
 
 TEST_DIR = test
 TEST_EXE = test_mlx.exe
@@ -58,6 +58,6 @@ $(MLX_HEADER): $(MLX_FOLDER)/$(MLX_HEADER)
 	ln -s $< $@
 
 $(TEST_DIR)/$(TEST_EXE): lib
-	$(CC) $(CPPFLAGS) -I. $(TEST_DIR)/main.c -o $@ -L. -lmlx $(LDLIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -I. $(@D)/main.c -o $@ -L. -lmlx $(LDLIBS)
 
 .PHONY: all lib clean fclean re pdf test
