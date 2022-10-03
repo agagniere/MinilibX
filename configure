@@ -80,5 +80,5 @@ echo "Folder :" $folder
 
 target=libmlx.mk
 echo "MLX_FOLDER :=" $folder > $target
-echo "CPPFLAGS += -I" $xlib_include >> $target
+test -n "$xlib_include" && echo "CPPFLAGS += -I" $xlib_include >> $target
 echo "LDLIBS +=" $link_flags >> $target
